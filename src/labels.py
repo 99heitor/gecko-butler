@@ -5,31 +5,36 @@ import os
 import urllib
 from time import sleep
 
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 from telegram.error import (TelegramError)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "keys/vision_key.json"
 
 
 def describe(bot, update):
-    print("Request from chat:" + str(update.message.chat_id))
+    message = update.message
+    if message.chat.username:
+        print "Request from user: " + message.chat.username
+    elif message.chat.title:
+        print "Request from chat: " + message.chat.title
+
     attempts = 0
-    if not update.message.reply_to_message:
+    if not message.reply_to_message:
         text = "Use the command /describe as a reply to a picture."
-    elif update.message.reply_to_message.photo:
+    elif message.reply_to_message.photo:
         while attempts < 3:
             try:
-                file_id = update.message.reply_to_message.photo[-1].file_id
+                file_id = message.reply_to_message.photo[-1].file_id
                 text = pretty_labels(bot.get_file(file_id), file_id)
                 attempts = 3
             except TelegramError as error:
-                print ("TelegramError was raised. Trying again...")
+                print "TelegramError was raised. Trying again..."
                 attempts += 1
                 sleep(1)
     else:
         text = "Sorry, this is not a picture."
-    bot.send_message(chat_id=update.message.chat_id,
-                     reply_to_message_id=update.message.message_id, text=text,
+    bot.send_message(chat_id=message.chat_id,
+                     reply_to_message_id=message.message_id, text=text,
                      parse_mode="Markdown")
 
 
@@ -58,10 +63,10 @@ def pretty_labels(photo, name):
     url = photo.file_path
     save_path = "../photos/" + str(name) + ".jpg"
     urllib.urlretrieve(url, save_path)
-    l = get_labels(save_path)
-    print(l)
+    results = get_labels(save_path)
+    print results
     response = "I see...\n"
-    for result in l:
+    for result in results:
         response += "*" + result['description'] + \
             "* : " + '{:.1%}'.format(result['score']) + '\n'
     return response
