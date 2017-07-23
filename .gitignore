@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# pictures
+photos/*.jpg
+
+#Secret stuff
+src/keys/*.json
