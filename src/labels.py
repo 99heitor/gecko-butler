@@ -3,6 +3,7 @@
 import base64
 import os
 import urllib
+import logging
 from time import sleep
 
 from googleapiclient.discovery import build
@@ -10,27 +11,23 @@ from telegram.error import (TelegramError)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "keys/vision_key.json"
 
+label_logger = logging.getLogger(__name__)
+
 
 def describe(bot, update):
     message = update.message
     if message.chat.username:
-        print "Request from user: " + message.chat.username
+        label_logger.info(
+            "Request from user: " + message.chat.username)
     elif message.chat.title:
-        print "Request from chat: " + message.chat.title
+        label_logger.info(
+            "Request from chat: " + message.chat.title)
 
-    attempts = 0
     if not message.reply_to_message:
         text = "Use the command /describe as a reply to a picture."
     elif message.reply_to_message.photo:
-        while attempts < 3:
-            try:
-                file_id = message.reply_to_message.photo[-1].file_id
-                text = pretty_labels(bot.get_file(file_id), file_id)
-                attempts = 3
-            except TelegramError as error:
-                print "TelegramError was raised. Trying again..."
-                attempts += 1
-                sleep(1)
+        file_id = message.reply_to_message.photo[-1].file_id
+        text = pretty_labels(bot.get_file(file_id), file_id)
     else:
         text = "Sorry, this is not a picture."
     bot.send_message(chat_id=message.chat_id,
@@ -64,9 +61,11 @@ def pretty_labels(photo, name):
     save_path = "../photos/" + str(name) + ".jpg"
     urllib.urlretrieve(url, save_path)
     results = get_labels(save_path)
-    print results
+    log = ""
     response = "I see...\n"
     for result in results:
         response += "*" + result['description'] + \
             "* : " + '{:.1%}'.format(result['score']) + '\n'
+        log += '[' + result['description'] + ': ' + str(result['score']) + '] '
+    label_logger.info(log)
     return response

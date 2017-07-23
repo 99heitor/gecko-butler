@@ -8,6 +8,16 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import (CommandHandler, Filters, InlineQueryHandler,
                           MessageHandler, Updater)
 
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+
+
+def error(bot, update, error):
+    logger.warn('Update "%s" caused error "%s"' % (update, error))
+
 
 def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="Hello world!")
@@ -29,12 +39,10 @@ def gecko_inline(bot, update):
 
 def main():
     with open('keys/bot_token.json') as json_data:
-        d = json.load(json_data)
-        updater = Updater(token=d['token'])
+        data = json.load(json_data)
+        updater = Updater(token=data['token'])
 
     dispatcher = updater.dispatcher
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     start_handler = CommandHandler('start', start)
     describe_handler = CommandHandler('describe', describe)
@@ -46,8 +54,9 @@ def main():
     dispatcher.add_handler(describe_handler)
     dispatcher.add_handler(inline_handler)
     dispatcher.add_handler(bygod_handler)
+    dispatcher.add_error_handler(error)
 
-    updater.start_polling()
+    updater.start_polling(bootstrap_retries=3)
     updater.idle()
 
 
