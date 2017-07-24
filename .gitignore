@@ -105,3 +105,7 @@ photos/*.jpg
 
 #VS Code
 .vscode/
+
+#secret stuff 
+bot_token.py
+keys/*.json
