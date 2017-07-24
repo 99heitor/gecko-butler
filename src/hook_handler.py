@@ -7,7 +7,7 @@ from gecko_butler import bot, setup, webhook
 from bot_token import TOKEN
 import json
 
-APP_URL = "http://geckobutler.appspot.com"
+APP_URL = "https://geckobutler.appspot.com"
 
 
 class WebHookHandler(RequestHandler):
