@@ -3,7 +3,7 @@ from webapp2 import RequestHandler
 
 import telegram
 from telegram import bot
-from message_handler import bot, setup, webhook
+from gecko_butler import bot, setup, webhook
 from application import TOKEN
 import json
 
