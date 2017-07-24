@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import base64
 import os
-import urllib
+import requests
 import logging
 from time import sleep
 
@@ -35,22 +35,19 @@ def describe(bot, update):
                      parse_mode="Markdown")
 
 
-def get_labels(photo_file):
+def get_labels(photo):
     service = build('vision', 'v1', cache_discovery=False)
-
-    with open(photo_file, 'rb') as image:
-        image_content = base64.b64encode(image.read())
-        service_request = service.images().annotate(body={
-            'requests': [{
-                'image': {
-                    'content': image_content.decode('UTF-8')
-                },
-                'features': [{
-                    'type': 'LABEL_DETECTION',
-                    'maxResults': 10
-                }]
+    service_request = service.images().annotate(body={
+        'requests': [{
+            'image': {
+                'content': photo.decode('UTF-8')
+            },
+            'features': [{
+                'type': 'LABEL_DETECTION',
+                'maxResults': 10
             }]
-        })
+        }]
+    })
 
     response = service_request.execute()
     return response['responses'][0]['labelAnnotations']
@@ -58,9 +55,10 @@ def get_labels(photo_file):
 
 def pretty_labels(photo, name):
     url = photo.file_path
-    save_path = "../photos/" + str(name) + ".jpg"
-    urllib.urlretrieve(url, save_path)
-    results = get_labels(save_path)
+    #save_path = "../photos/" + str(name) + ".jpg"
+    #urllib.urlretrieve(url, save_path)
+    image64 = base64.b64encode(requests.get(url).content)
+    results = get_labels(image64)
     log = ""
     response = "I see...\n"
     for result in results:
