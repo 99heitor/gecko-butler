@@ -5,7 +5,7 @@ import sys
 import json
 from webapp2 import Route, WSGIApplication
 
-vendor.add(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib'))
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib'))
 
 import hook_handler
 
