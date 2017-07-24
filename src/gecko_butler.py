@@ -1,6 +1,5 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-import json
 import logging
 from bygod import bygod, bygodify
 from labels import describe
