@@ -4,7 +4,8 @@ import json
 import logging
 from bygod import bygod, bygodify
 from labels import describe
-from telegram import InlineQueryResultArticle, InputTextMessageContent
+from application import TOKEN
+from telegram import InlineQueryResultArticle, InputTextMessageContent, Bot
 from telegram.ext import (CommandHandler, Filters, InlineQueryHandler,
                           MessageHandler, Updater)
 
@@ -13,6 +14,9 @@ logging.basicConfig(
     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
+
+dispatcher = None
+bot = Bot(TOKEN)
 
 
 def error(bot, update, error):
@@ -37,17 +41,18 @@ def gecko_inline(bot, update):
     bot.answer_inline_query(update.inline_query.id, results)
 
 
-def main():
-    with open('keys/bot_token.json') as json_data:
-        data = json.load(json_data)
-        updater = Updater(token=data['token'])
+def setup():
+    global dispatcher
 
-    dispatcher = updater.dispatcher
+    # with open('keys/bot_token.json') as json_data:
+    #     data = json.load(json_data)
+    #     updater = Updater(token=data['token'])
+
+    dispatcher = Dispatcher(bot=bot, update_queue=None, workers=0)
 
     start_handler = CommandHandler('start', start)
     describe_handler = CommandHandler('describe', describe)
     bygod_handler = CommandHandler('bygodify', bygodify, pass_args=True)
-
     inline_handler = InlineQueryHandler(gecko_inline)
 
     dispatcher.add_handler(start_handler)
@@ -55,10 +60,10 @@ def main():
     dispatcher.add_handler(inline_handler)
     dispatcher.add_handler(bygod_handler)
     dispatcher.add_error_handler(error)
-
-    updater.start_polling(bootstrap_retries=3)
-    updater.idle()
+    return dispatcher
 
 
-if __name__ == "__main__":
-    main()
+def webhook(update):
+    global dispatcher
+    # Manually get updates and pass to dispatcher
+    dispatcher.process_update(update)
