@@ -3,10 +3,11 @@
 import os
 import sys
 import json
+import hook_handler
 
 from webapp2 import Route, WSGIApplication
 
-sys.path.append(os.path.join(os.path.abspath('.'), 'venv/Lib/site-packages'))
+vendor.add(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib'))
 
 
 with open('keys/bot_token.json') as json_data:
