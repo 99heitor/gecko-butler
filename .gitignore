@@ -103,8 +103,5 @@ ENV/
 # pictures
 photos/*.jpg
 
-#Secret stuff
-src/keys/*.json
-
 #VS Code
 .vscode/

@@ -9,6 +9,7 @@ import json
 
 APP_URL = "http://geckobutler.appspot.com"
 
+
 class WebHookHandler(RequestHandler):
     def set_webhook(self):
         '''
