@@ -9,7 +9,7 @@ from time import sleep
 from googleapiclient.discovery import build
 from telegram.error import (TelegramError)
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "keys/vision_key.json"
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "keys/vision_key.json"
 
 label_logger = logging.getLogger(__name__)
 
