@@ -3,10 +3,8 @@ from webapp2 import RequestHandler
 
 import telegram
 from setup import bot, setup, webhook
-from bot_token import TOKEN
+from bot_info import TOKEN, APP_URL
 import json
-
-APP_URL = "https://geckobutler.appspot.com"
 
 
 class WebHookHandler(RequestHandler):

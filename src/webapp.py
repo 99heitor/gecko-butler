@@ -12,7 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(
     os.path.realpath(__file__)), 'lib'))
 
 import hook_handler
-from bot_token import TOKEN
+from bot_info import TOKEN
 from webapp2 import Route, WSGIApplication
 
 # Setting the valid routes for our simple web application.
