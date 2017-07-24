@@ -2,8 +2,7 @@
 from webapp2 import RequestHandler
 
 import telegram
-from telegram import bot
-from gecko_butler import bot, setup, webhook
+from setup import bot, setup, webhook
 from bot_token import TOKEN
 import json
 
@@ -12,11 +11,8 @@ APP_URL = "https://geckobutler.appspot.com"
 
 class WebHookHandler(RequestHandler):
     def set_webhook(self):
-        '''
-        Set webhook for your bot
-        '''
         setup()
-        s = bot.setWebhook(APP_URL + '/' + TOKEN)
+        s = bot.set_webhook(APP_URL + '/' + TOKEN)
         if s:
             self.response.write("Webhook setted")
         else:
