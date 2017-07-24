@@ -3,11 +3,11 @@
 import os
 import sys
 import json
-import hook_handler
-
 from webapp2 import Route, WSGIApplication
 
 vendor.add(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib'))
+
+import hook_handler
 
 
 with open('keys/bot_token.json') as json_data:
