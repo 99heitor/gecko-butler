@@ -4,7 +4,7 @@ from webapp2 import RequestHandler
 import telegram
 from telegram import bot
 from gecko_butler import bot, setup, webhook
-from application import TOKEN
+from bot_token import TOKEN
 import json
 
 APP_URL = "http://geckobutler.appspot.com"

@@ -3,7 +3,7 @@
 import logging
 from bygod import bygod, bygodify
 from labels import describe
-from application import TOKEN
+from bot_token import TOKEN
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Bot
 from telegram.ext import (CommandHandler, Filters, InlineQueryHandler,
                           MessageHandler, Updater)
