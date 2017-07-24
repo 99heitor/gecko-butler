@@ -6,7 +6,7 @@ from labels import describe
 from bot_token import TOKEN
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Bot
 from telegram.ext import (CommandHandler, Filters, InlineQueryHandler,
-                          MessageHandler, Updater)
+                          MessageHandler, Dispatcher)
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
