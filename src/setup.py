@@ -3,6 +3,7 @@
 import logging
 from bygodify import bygodify_command, bygodify
 from describe import describe_command
+from tldr import tldr_command
 from bot_info import TOKEN
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Bot
 from telegram.ext import (CommandHandler, Filters, InlineQueryHandler,
@@ -50,12 +51,15 @@ def setup():
 
     start_handler = CommandHandler('start', start)
     describe_handler = CommandHandler('describe', describe_command)
+    tldr_handler = CommandHandler('tldr', tldr_command,
+                                  pass_args=True)
     bygod_handler = CommandHandler('bygodify', bygodify_command,
                                    pass_args=True)
     inline_handler = InlineQueryHandler(gecko_inline)
 
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(describe_handler)
+    dispatcher.add_handler(tldr_handler)
     dispatcher.add_handler(inline_handler)
     dispatcher.add_handler(bygod_handler)
     dispatcher.add_error_handler(error)
