@@ -4,7 +4,7 @@ threadsafe: yes
 
 handlers:
 - url: .*
-  script: webapp.app
+  script: bot.app
 
 libraries:
 - name: webapp2

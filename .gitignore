@@ -108,4 +108,4 @@ photos/*.jpg
 
 #secret stuff 
 bot_info.py
-keys/*.json
+vision_key.json

@@ -1,10 +1,25 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+from telegram import InlineQueryResultArticle, InputTextMessageContent
 
 
-def bygodify_command(bot, update, args):
+def command(bot, update, args):
     text = (' ').join(args)
     bot.send_message(chat_id=update.message.chat_id, text=bygodify(text))
+
+
+def inline(bot, update):
+    query = update.inline_query.query
+    if not query:
+        return
+    results = list()
+
+    results.append(InlineQueryResultArticle(
+        id="Bygode",
+        title="Bygodify",
+        input_message_content=InputTextMessageContent(bygodify(query))
+    ))
+    bot.answer_inline_query(update.inline_query.id, results)
 
 
 def bygodify(query):

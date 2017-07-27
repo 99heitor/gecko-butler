@@ -1,18 +1,16 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 import base64
-import os
-import requests
 import logging
 
+import requests
 from googleapiclient.discovery import build
-from telegram.error import (TelegramError)
 
 # Setting logger for this file
 label_logger = logging.getLogger(__name__)
 
 
-def describe_command(bot, update):
+def command(bot, update):
     message = update.message
     if message.chat.username:
         label_logger.info(

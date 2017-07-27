@@ -7,7 +7,7 @@ import requests
 from bot_info import SMMRY_KEY
 
 
-def tldr_command(bot, update, args):
+def command(bot, update, args):
     message = update.message
     payload = []
     text = ""
