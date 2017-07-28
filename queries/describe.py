@@ -38,9 +38,11 @@ def describe(photo):
     log = ""
     response = "I see...\n"
     for result in results:
-        response += "*" + result['description'] + \
-            "* : " + '{:.1%}'.format(result['score']) + '\n'
-        log += '[' + result['description'] + ': ' + str(result['score']) + '] '
+        response += "*{}* : {:.1%}\n".format(
+            result['description'],
+            result['score']
+        )
+        log += "[{}: {}] ".format(result['description'], result['score'])
     label_logger.info(log)
     return response
 
