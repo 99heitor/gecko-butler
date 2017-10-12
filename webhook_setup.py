@@ -9,6 +9,7 @@ from webapp2 import RequestHandler
 
 from queries import bygodify, describe, tldr
 from bot_info import TOKEN, APP_URL
+from bot import app
 
 # Setting log structure
 logging.basicConfig(
@@ -16,14 +17,22 @@ logging.basicConfig(
     level=logging.INFO)
 
 
+def get_bot():
+    if app.registry.get('bot') is None:
+        app.registry['bot'] = telegram.Bot(TOKEN)
+    return app.registry['bot']
+
+
+def get_dispatcher():
+    if app.registry.get('dispatcher') is None:
+        app.registry['dispatcher'] = setup(get_bot())
+    return app.registry['dispatcher']
+
+
 class WebHookHandler(RequestHandler):
 
-    bot = telegram.Bot(TOKEN)
-    dispatcher = None
-
     def set_webhook(self):
-        WebHookHandler.dispatcher = setup(self.bot)
-        if self.bot.set_webhook(APP_URL + '/' + TOKEN):
+        if get_bot().set_webhook(APP_URL + '/' + TOKEN):
             self.response.write("Webhook setted")
         else:
             self.response.write("Webhook setup failed")
@@ -31,8 +40,8 @@ class WebHookHandler(RequestHandler):
     def webhook_handler(self):
         # Retrieve the message in JSON and then transform it to Telegram object
         body = json.loads(self.request.body)
-        update = telegram.Update.de_json(body, self.bot)
-        self.dispatcher.process_update(update)
+        update = telegram.Update.de_json(body, get_bot())
+        get_dispatcher().process_update(update)
 
 
 def setup(bot):
