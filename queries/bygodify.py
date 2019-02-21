@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 
@@ -31,6 +30,6 @@ def bygodify(query):
     if sentences[-1].strip() != "":
         bickering += '"' + sentences[-1].strip() + '" '
 
-    final_message = u'Mas que chat desgraçado.\n\nQuando eu li ' + \
-        bickering + u'já deu um desânimo. Perde toda a graça do negocio.'
+    final_message = 'Mas que chat desgraçado.\n\nQuando eu li ' + \
+        bickering + 'já deu um desânimo. Perde toda a graça do negocio.'
     return final_message

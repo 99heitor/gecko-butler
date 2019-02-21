@@ -1,13 +1,14 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 import base64
 import logging
-
+import io
 import requests
-from googleapiclient.discovery import build
+from google.cloud import vision
+from google.cloud.vision import types
 
 # Setting logger for this file
 label_logger = logging.getLogger(__name__)
+client = vision.ImageAnnotatorClient()
 
 
 def command(bot, update):
@@ -33,33 +34,21 @@ def command(bot, update):
 
 def describe(photo):
     url = photo.file_path
-    image64 = base64.b64encode(requests.get(url).content)
-    results = get_labels(image64)
+    image_bytes = io.BytesIO(requests.get(url).content)
+    results = get_labels(image_bytes)
     log = ""
     response = "I see...\n"
     for result in results:
         response += "*{}* : {:.1%}\n".format(
-            result['description'],
-            result['score']
+            result.description,
+            result.score
         )
-        log += "[{}: {}] ".format(result['description'], result['score'])
+        log += "[{}: {}] ".format(result.description, result.score)
     label_logger.info(log)
     return response
 
 
-def get_labels(photo):
-    service = build('vision', 'v1', cache_discovery=False)
-    service_request = service.images().annotate(body={
-        'requests': [{
-            'image': {
-                'content': photo.decode('UTF-8')
-            },
-            'features': [{
-                'type': 'LABEL_DETECTION',
-                'maxResults': 10
-            }]
-        }]
-    })
-
-    response = service_request.execute()
-    return response['responses'][0]['labelAnnotations']
+def get_labels(image):
+    response = client.label_detection(image=image)
+    labels = response.label_annotations
+    return labels

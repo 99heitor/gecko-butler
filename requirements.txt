@@ -1,3 +1,4 @@
-python-telegram-bot>=5.0
-google-api-python-client>=1.6.2
-requests>=2.18.0
+Flask==1.0.2
+python-telegram-bot==11.1.0
+requests==2.21.0
+google-cloud-vision==0.35.2

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
 from re import findall, sub
 
 import requests
